@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" 
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" 
+    crossorigin="anonymous">
+</head>
+<body>
+    <div class="row" style="width: 80%; margin-left: 10%;">
+        <button id="__appendGroup" class="btn btn-primary">Add Group</button>
+        <div id="__group-container">
+            
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" 
+    integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" 
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" 
+    crossorigin="anonymous"></script>
+    <script>
+        $(document).on('click', '#__appendGroup', function () { appendGroup() })
+        var counter = 0
+        $(document).on('click', '.__delete-col', function () {
+            let buttonLine = this.closest('.__button-line')
+            let buttonArr = $(buttonLine).find('.__delete-col')
+            let index = $(buttonArr).index($(this))
+            let group = this.closest('.__group')
+            let rowContainer = $(group).find('.__row-container')
+            let rows = $(rowContainer).find('.__row')
+            $(rows).each((i, el) => {
+                $(el).find(`.__cell:eq(${index})`).remove()
+            })
+            $(this).remove()
+        })
+        $(document).on('click', '.__add-col', function () {
+            let group = this.closest('.__group')
+            let buttonLine = $(group).find('.__button-line')
+            $(buttonLine).append(`
+                <button class="col-md-3 __delete-col">Del</button>
+            `)
+            let rowContainer = $(group).find('.__row-container')
+            let rows = $(rowContainer).find('.__row')
+            $(rows).each((i, el) => {
+                $(el).find('.__cell').last().after(`
+                    <div class="col-md-3 __cell">
+                        <input class="form-control">
+                    </div>
+                `)
+            })
+        })
+        $(document).on('click', '.__delete-row', function () {
+            $(this.closest('.__row')).remove()
+        })
+        $(document).on('click', '.__add-row', function () {
+            let group = this.closest('.__group')
+            let rowContainer = $(group).find('.__row-container')
+            let rows = $(rowContainer).find('.__row')
+            $(rows).last().after(`
+                <div class="row __row">
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-3 __cell">
+                                <input class="form-control">
+                            </div>
+                            <div class="col-md-3 __cell">
+                                <input class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="col-md-3"><button class="__delete-row">Del</button></div>
+                    </div>           
+                </div>
+            `)
+        })
+
+        function appendGroup() {
+            let buttonLine = `
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="row __button-line">
+                            <button class="col-md-3 __delete-col">Del</button>
+                            <button class="col-md-3 __delete-col">Del</button>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="__add-col">Add</button>
+                    </div>           
+                </div>
+            `
+            let cellLine = `
+                <div class="row __row">
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-3 __cell">
+                                <input class="form-control">
+                            </div>
+                            <div class="col-md-3 __cell">
+                                <input class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="col-md-3"><button class="__delete-row">Del</button></div>
+                    </div>           
+                </div>
+            `
+            $('#__group-container').append(`
+                <div class="row __group">
+                    <label>Group</label>
+                    <input class="form-control">
+                    ${buttonLine}
+                    <div class="__row-container">
+                        ${cellLine}
+                        ${cellLine}
+                    </div>
+                    <button class="__add-row">Add row</button>
+                </div>
+            `)
+            counter++
+        }
+    </script>
+</body>
+</html>
